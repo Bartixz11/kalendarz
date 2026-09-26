@@ -39,6 +39,7 @@
             display: flex;
             height: 100vh;
             overflow: hidden;
+            overscroll-behavior-y: contain; /* Pomaga zapobiegać domyślnemu odświeżaniu przeglądarki */
         }
 
         /* LAYOUT GŁÓWNY */
@@ -111,6 +112,22 @@
             position: relative;
         }
 
+        /* Wskaźnik przeciągnięcia (pull-to-refresh) */
+        .ptr-indicator {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            right: 0;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            transition: transform 0.2s ease;
+            z-index: 100;
+        }
+
         .tab-content {
             display: none;
             padding: 25px;
@@ -131,7 +148,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ZAKŁADKA 1: KALENDARZ (Zoptymalizowany pod mobile) */
+        /* ZAKŁADKA 1: KALENDARZ */
         .calendar-header {
             display: flex;
             justify-content: space-between;
@@ -142,6 +159,7 @@
             border-radius: 14px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             border: 1px solid var(--border);
+            gap: 10px;
         }
 
         .month-nav-container {
@@ -173,7 +191,33 @@
             text-align: center;
         }
 
-        /* BĄBEL DO DODAWANIA NAD KALENDARZEM */
+        /* DYSKRETNY PRZYCISK ODŚWIEŻ I DODAJ */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .refresh-text-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            padding: 6px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .refresh-text-btn:hover {
+            background-color: var(--surface-hover);
+            color: var(--text-main);
+            border-color: var(--text-muted);
+        }
+
         .header-add-btn {
             width: 40px;
             height: 40px;
@@ -300,7 +344,7 @@
             background-color: var(--accent);
         }
 
-        /* ZAKŁADKA 2: LISTA WYDARZEŃ I WYSZUKIWARKA */
+        /* INNE ZAKŁADKI (Wspólne style) */
         .header-title {
             font-size: 1.6rem;
             margin-bottom: 15px;
@@ -386,8 +430,7 @@
             font-style: italic;
         }
 
-        /* ZAKŁADKA 3: POWIADOMIENIA */
-        .notif-form-container {
+        .notif-form-container, .category-form, .settings-group {
             background-color: var(--surface-color);
             border-radius: 14px;
             padding: 15px;
@@ -396,13 +439,13 @@
             border: 1px solid var(--border);
         }
 
-        .notif-row {
+        .notif-row, .category-row {
             display: flex;
             gap: 12px;
             margin-bottom: 12px;
         }
 
-        .notif-row > div {
+        .notif-row > div, .category-row > div {
             flex: 1;
         }
 
@@ -430,39 +473,6 @@
         .notif-status.pending {
             background-color: rgba(245, 158, 11, 0.2);
             color: var(--warning);
-        }
-
-        /* ZAKŁADKA 4: KATEGORIE (NOWOŚĆ) */
-        .category-form {
-            background-color: var(--surface-color);
-            border-radius: 14px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 1px solid var(--border);
-        }
-
-        .category-row {
-            display: flex;
-            gap: 10px;
-            align-items: flex-end;
-        }
-
-        .category-badge-preview {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 6px;
-            color: white;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        /* ZAKŁADKA 5: USTAWIENIA */
-        .settings-group {
-            background-color: var(--surface-color);
-            border-radius: 14px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 1px solid var(--border);
         }
 
         .settings-group h3 {
@@ -643,8 +653,13 @@
             }
 
             .month-year {
-                font-size: 1.1rem;
-                min-width: 110px;
+                font-size: 1.05rem;
+                min-width: 100px;
+            }
+
+            .refresh-text-btn {
+                padding: 5px 8px;
+                font-size: 0.75rem;
             }
 
             .header-add-btn {
@@ -706,7 +721,10 @@
     </nav>
 
     <!-- GŁÓWNA ZAWARTOŚĆ -->
-    <main>
+    <main id="mainScrollContainer">
+        <!-- Wskaźnik przeciągnięcia do odświeżenia -->
+        <div class="ptr-indicator" id="ptrIndicator">🔄 Pociągnij, aby odświeżyć...</div>
+
         <!-- ZAKŁADKA 1: KALENDARZ -->
         <div id="tab-calendar" class="tab-content active">
             <div class="calendar-header">
@@ -715,7 +733,10 @@
                     <div class="month-year" id="monthYear"></div>
                     <button class="month-btn" id="nextMonth">&#10095;</button>
                 </div>
-                <button id="globalAddBtn" class="header-add-btn" aria-label="Dodaj nowe wydarzenie" title="Dodaj wydarzenie">+</button>
+                <div class="header-actions">
+                    <button class="refresh-text-btn" id="refreshBtn" title="Odśwież stronę">🔄 Odśwież</button>
+                    <button id="globalAddBtn" class="header-add-btn" aria-label="Dodaj nowe wydarzenie" title="Dodaj wydarzenie">+</button>
+                </div>
             </div>
             <div class="calendar-grid">
                 <div class="weekdays">
@@ -759,7 +780,7 @@
             <div class="list-container" id="notificationsListContainer"></div>
         </div>
 
-        <!-- ZAKŁADKA 4: KATEGORIE (NOWOŚĆ) -->
+        <!-- ZAKŁADKA 4: KATEGORIE -->
         <div id="tab-categories" class="tab-content">
             <h1 class="header-title">Zarządzaj Kategoriami</h1>
             <div class="category-form">
@@ -846,6 +867,7 @@
     const prevMonthBtn = document.getElementById('prevMonth');
     const nextMonthBtn = document.getElementById('nextMonth');
     const searchInput = document.getElementById('searchInput');
+    const refreshBtn = document.getElementById('refreshBtn');
 
     const globalAddBtn = document.getElementById('globalAddBtn');
     const eventModal = document.getElementById('eventModal');
@@ -868,7 +890,6 @@
     const btnSaveNotif = document.getElementById('btnSaveNotif');
     const notificationsListContainer = document.getElementById('notificationsListContainer');
 
-    // Elementy Kategorii
     const catNameInput = document.getElementById('catNameInput');
     const catColorInput = document.getElementById('catColorInput');
     const btnAddCategory = document.getElementById('btnAddCategory');
@@ -886,13 +907,62 @@
     let eventsData = JSON.parse(localStorage.getItem('planerEvents')) || {};
     let notificationsData = JSON.parse(localStorage.getItem('planerNotifications')) || [];
     
-    // Domyślne kategorie, jeśli użytkownik jeszcze nie miał własnych
     let categoriesData = JSON.parse(localStorage.getItem('planerCategories')) || [
         { id: 'default', name: 'Standardowe', color: '#3b82f6' },
         { id: 'work', name: 'Praca', color: '#ef4444' },
         { id: 'personal', name: 'Prywatne', color: '#10b981' },
         { id: 'school', name: 'Szkoła', color: '#8b5cf6' }
     ];
+
+    // Obsługa przycisku Odśwież
+    refreshBtn.addEventListener('click', () => {
+        location.reload();
+    });
+
+    // PULL TO REFRESH (Przeciągnij palcem w dół, aby odświeżyć)
+    const mainScrollContainer = document.getElementById('mainScrollContainer');
+    const ptrIndicator = document.getElementById('ptrIndicator');
+    let touchStartY = 0;
+    let isPulling = false;
+
+    mainScrollContainer.addEventListener('touchstart', (e) => {
+        if (mainScrollContainer.scrollTop === 0) {
+            touchStartY = e.touches[0].clientY;
+            isPulling = true;
+        }
+    }, { passive: true });
+
+    mainScrollContainer.addEventListener('touchmove', (e) => {
+        if (!isPulling) return;
+        const touchY = e.touches[0].clientY;
+        const diff = touchY - touchStartY;
+
+        if (diff > 0 && diff < 120) {
+            ptrIndicator.style.transform = `translateY(${diff}px)`;
+            if (diff > 80) {
+                ptrIndicator.textContent = 'release 🔄 Puść, aby odświeżyć';
+            } else {
+                ptrIndicator.textContent = '🔄 Pociągnij, aby odświeżyć...';
+            }
+        }
+    }, { passive: true });
+
+    mainScrollContainer.addEventListener('touchend', (e) => {
+        if (!isPulling) return;
+        const touchY = e.changedTouches[0].clientY;
+        const diff = touchY - touchStartY;
+
+        if (diff > 80 && mainScrollContainer.scrollTop === 0) {
+            ptrIndicator.textContent = 'Odświeżanie...';
+            ptrIndicator.style.transform = `translateY(50px)`;
+            setTimeout(() => {
+                location.reload();
+            }, 400);
+        } else {
+            ptrIndicator.style.transform = `translateY(0px)`;
+        }
+        isPulling = false;
+    });
 
     function saveCategoriesToStorage() {
         localStorage.setItem('planerCategories', JSON.stringify(categoriesData));
@@ -931,7 +1001,6 @@
             const delBtn = document.createElement('button');
             delBtn.classList.add('delete-btn');
             delBtn.textContent = 'Usuń';
-            // Nie pozwól usunąć domyślnej kategorii "default" żeby uniknąć błędów
             if (cat.id === 'default') {
                 delBtn.style.opacity = '0.4';
                 delBtn.style.cursor = 'not-allowed';
@@ -1014,7 +1083,6 @@
                     const evBadge = document.createElement('div');
                     evBadge.classList.add('event-badge');
                     
-                    // Pobierz kolor przypisany do kategorii wydarzenia
                     const catObj = categoriesData.find(c => c.id === ev.type);
                     if (catObj) {
                         evBadge.style.backgroundColor = catObj.color;
