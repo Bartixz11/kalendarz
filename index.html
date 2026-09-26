@@ -39,7 +39,7 @@
             display: flex;
             height: 100vh;
             overflow: hidden;
-            overscroll-behavior-y: contain; /* Pomaga zapobiegać domyślnemu odświeżaniu przeglądarki */
+            overscroll-behavior-y: contain;
         }
 
         /* LAYOUT GŁÓWNY */
@@ -390,10 +390,16 @@
             align-items: center;
             padding: 12px 10px;
             border-bottom: 1px solid var(--border);
+            gap: 10px;
         }
 
         .list-item:last-child {
             border-bottom: none;
+        }
+
+        .list-item-info {
+            flex: 1;
+            min-width: 0;
         }
 
         .list-item-info strong {
@@ -407,14 +413,35 @@
             font-size: 0.85rem;
         }
 
+        .list-item-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .edit-btn {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: var(--accent);
+            border: 1px solid transparent;
+            padding: 6px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .edit-btn:hover {
+            background-color: var(--accent);
+            color: white;
+        }
+
         .delete-btn {
             background-color: rgba(239, 68, 68, 0.1);
             color: var(--danger);
             border: 1px solid transparent;
-            padding: 6px 12px;
+            padding: 6px 10px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: all 0.2s;
         }
 
@@ -694,6 +721,17 @@
                 padding: 2px 4px;
                 border-radius: 3px;
             }
+
+            .list-item-actions {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .edit-btn, .delete-btn {
+                padding: 5px 8px;
+                font-size: 0.75rem;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -825,11 +863,13 @@
     </main>
 </div>
 
-<!-- MODAL WYDARZENIA -->
+<!-- MODAL WYDARZENIA (Dodawanie / Edycja) -->
 <div class="modal-overlay" id="eventModal">
     <div class="modal-content">
-        <div class="modal-header">Nowe Wydarzenie</div>
+        <div class="modal-header" id="modalTitleText">Nowe Wydarzenie</div>
         <div class="modal-body">
+            <input type="hidden" id="editDateKey">
+            <input type="hidden" id="editIndex">
             <div class="form-group">
                 <label for="eventDateInput">Data</label>
                 <input type="date" id="eventDateInput">
@@ -871,9 +911,12 @@
 
     const globalAddBtn = document.getElementById('globalAddBtn');
     const eventModal = document.getElementById('eventModal');
+    const modalTitleText = document.getElementById('modalTitleText');
     const btnCancelModal = document.getElementById('btnCancelModal');
     const btnSaveEvent = document.getElementById('btnSaveEvent');
     
+    const editDateKeyInput = document.getElementById('editDateKey');
+    const editIndexInput = document.getElementById('editIndex');
     const eventDateInput = document.getElementById('eventDateInput');
     const eventTitleInput = document.getElementById('eventTitle');
     const eventDescInput = document.getElementById('eventDescription');
@@ -940,7 +983,7 @@
         if (diff > 0 && diff < 120) {
             ptrIndicator.style.transform = `translateY(${diff}px)`;
             if (diff > 80) {
-                ptrIndicator.textContent = 'release 🔄 Puść, aby odświeżyć';
+                ptrIndicator.textContent = '🔄 Puść, aby odświeżyć';
             } else {
                 ptrIndicator.textContent = '🔄 Pociągnij, aby odświeżyć...';
             }
@@ -1097,7 +1140,7 @@
             }
 
             dayDiv.appendChild(eventsCont);
-            dayDiv.addEventListener('click', () => openModal(dateStr, i, monthNames[month], year));
+            dayDiv.addEventListener('click', () => openModalForAdd(dateStr, i, monthNames[month], year));
             daysContainer.appendChild(dayDiv);
         }
     }
@@ -1180,13 +1223,24 @@
                 ${descHtml}
             `;
 
+            const actionsDiv = document.createElement('div');
+            actionsDiv.classList.add('list-item-actions');
+
+            const editBtn = document.createElement('button');
+            editBtn.classList.add('edit-btn');
+            editBtn.textContent = 'Edytuj';
+            editBtn.onclick = () => openModalForEdit(ev.dateStr, ev.index);
+
             const delBtn = document.createElement('button');
             delBtn.classList.add('delete-btn');
             delBtn.textContent = 'Usuń';
             delBtn.onclick = () => deleteEvent(ev.dateStr, ev.index);
 
+            actionsDiv.appendChild(editBtn);
+            actionsDiv.appendChild(delBtn);
+
             item.appendChild(info);
-            item.appendChild(delBtn);
+            item.appendChild(actionsDiv);
             eventsListContainer.appendChild(item);
         });
     }
@@ -1288,7 +1342,9 @@
         }
     }, 30000);
 
-    function openModal(dateStr = null, day = null, monthName = null, year = null) {
+    function openModalForAdd(dateStr = null, day = null, monthName = null, year = null) {
+        editDateKeyInput.value = '';
+        editIndexInput.value = '';
         eventTitleInput.value = '';
         eventTimeInput.value = '';
         eventDescInput.value = '';
@@ -1297,16 +1353,36 @@
         if (dateStr) {
             const [y, m, d] = dateStr.split('-');
             eventDateInput.value = `${y}-${String(parseInt(m)+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-            document.querySelector('.modal-header').textContent = `Wydarzenie: ${day} ${monthName}`;
+            modalTitleText.textContent = `Wydarzenie: ${day} ${monthName}`;
         } else {
             const today = new Date();
             eventDateInput.value = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
-            document.querySelector('.modal-header').textContent = `Nowe Wydarzenie`;
+            modalTitleText.textContent = `Nowe Wydarzenie`;
         }
         eventModal.classList.add('active');
     }
 
-    function closeModal() { eventModal.classList.remove('active'); }
+    function openModalForEdit(dateStr, index) {
+        const ev = eventsData[dateStr][index];
+        editDateKeyInput.value = dateStr;
+        editIndexInput.value = index;
+        
+        const [y, m, d] = dateStr.split('-');
+        eventDateInput.value = `${y}-${String(parseInt(m)+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        eventTitleInput.value = ev.title;
+        eventDescInput.value = ev.desc || '';
+        eventTimeInput.value = ev.time || '';
+        
+        updateCategorySelect();
+        eventTypeInput.value = ev.type || 'default';
+
+        modalTitleText.textContent = 'Edytuj Wydarzenie';
+        eventModal.classList.add('active');
+    }
+
+    function closeModal() { 
+        eventModal.classList.remove('active'); 
+    }
 
     function saveEvent() {
         const title = eventTitleInput.value.trim();
@@ -1321,14 +1397,29 @@
         }
 
         const [yStr, mStr, dStr] = dateVal.split('-');
-        const dateStr = `${parseInt(yStr)}-${parseInt(mStr) - 1}-${parseInt(dStr)}`;
+        const newDateStr = `${parseInt(yStr)}-${parseInt(mStr) - 1}-${parseInt(dStr)}`;
 
-        if (!eventsData[dateStr]) eventsData[dateStr] = [];
-        eventsData[dateStr].push({ title, time, type, desc });
+        const editDateKey = editDateKeyInput.value;
+        const editIndex = editIndexInput.value;
+
+        if (editDateKey !== "" && editIndex !== "") {
+            // TRYB EDYCJI: Usuń ze starego klucza lub zaktualizuj
+            eventsData[editDateKey].splice(editIndex, 1);
+            if (eventsData[editDateKey].length === 0) {
+                delete eventsData[editDateKey];
+            }
+        }
+
+        // Zapis pod nową lub tą samą datą
+        if (!eventsData[newDateStr]) eventsData[newDateStr] = [];
+        eventsData[newDateStr].push({ title, time, type, desc });
+        
         localStorage.setItem('planerEvents', JSON.stringify(eventsData));
 
         renderCalendar(currentMonth, currentYear);
-        if (document.getElementById('tab-events').classList.contains('active')) renderEventsList(searchInput.value);
+        if (document.getElementById('tab-events').classList.contains('active')) {
+            renderEventsList(searchInput.value);
+        }
         closeModal();
     }
 
@@ -1396,7 +1487,7 @@
 
     btnCancelModal.addEventListener('click', closeModal);
     btnSaveEvent.addEventListener('click', saveEvent);
-    globalAddBtn.addEventListener('click', () => openModal(null));
+    globalAddBtn.addEventListener('click', () => openModalForAdd(null));
     eventModal.addEventListener('click', (e) => { if (e.target === eventModal) closeModal(); });
 
     updateCategorySelect();
