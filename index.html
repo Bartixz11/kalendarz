@@ -130,10 +130,10 @@
 
         .tab-content {
             display: none;
-            padding: 25px;
+            padding: 20px;
             animation: fadeIn 0.3s ease-in-out;
             height: 100%;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             width: 100%;
         }
@@ -153,13 +153,14 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             background-color: var(--surface-color);
-            padding: 12px 20px;
+            padding: 10px 20px;
             border-radius: 14px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             border: 1px solid var(--border);
             gap: 10px;
+            flex-shrink: 0;
         }
 
         .month-nav-container {
@@ -247,7 +248,7 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             border: 1px solid var(--border);
-            min-height: 450px;
+            min-height: 0; /* Kluczowe dla poprawnego dopasowania flexa */
         }
 
         .weekdays {
@@ -255,10 +256,11 @@
             grid-template-columns: repeat(7, 1fr);
             background-color: var(--surface-hover);
             border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
         }
 
         .weekdays div {
-            padding: 10px 4px;
+            padding: 8px 4px;
             text-align: center;
             font-weight: 600;
             color: var(--text-muted);
@@ -268,20 +270,22 @@
         .days {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
+            grid-template-rows: repeat(6, 1fr); /* 6 rzędów gwarantuje stabilną wysokość i brak kurczenia */
             flex: 1;
-            grid-auto-rows: minmax(80px, 1fr);
+            height: 100%;
         }
 
         .day {
             border-right: 1px solid var(--border);
             border-bottom: 1px solid var(--border);
-            padding: 6px;
+            padding: 4px;
             cursor: pointer;
             transition: background-color 0.2s;
             position: relative;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            min-height: 0;
         }
 
         .day:nth-child(7n) {
@@ -298,15 +302,16 @@
         }
 
         .day-number {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 500;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
             display: inline-block;
-            width: 26px;
-            height: 26px;
-            line-height: 26px;
+            width: 24px;
+            height: 24px;
+            line-height: 24px;
             text-align: center;
             border-radius: 50%;
+            flex-shrink: 0;
         }
 
         .day.today .day-number {
@@ -321,7 +326,8 @@
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 3px;
+            gap: 2px;
+            min-height: 0;
         }
 
         .events-container::-webkit-scrollbar {
@@ -333,14 +339,15 @@
         }
 
         .event-badge {
-            font-size: 0.7rem;
-            padding: 3px 6px;
-            border-radius: 5px;
+            font-size: 0.65rem;
+            padding: 2px 4px;
+            border-radius: 4px;
             color: white;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             background-color: var(--accent);
+            flex-shrink: 0;
         }
 
         /* INNE ZAKŁADKI (Wspólne style) */
@@ -681,8 +688,9 @@
                 gap: 2px;
                 border-right: none;
                 border-bottom: 1px solid var(--border);
-                order: 1; /* Zakładki na samej górze */
+                order: 1;
                 background-color: var(--surface-color);
+                flex-shrink: 0;
             }
 
             .nav-logo {
@@ -706,8 +714,8 @@
             }
 
             main {
-                order: 2; /* Zawartość pod zakładkami */
-                height: calc(100vh - 60px);
+                order: 2;
+                height: calc(100vh - 55px);
             }
 
             .tab-content {
@@ -716,12 +724,12 @@
 
             .calendar-header {
                 padding: 8px 12px;
-                margin-bottom: 10px;
+                margin-bottom: 8px;
             }
 
             .month-year {
-                font-size: 1.05rem;
-                min-width: 100px;
+                font-size: 1rem;
+                min-width: 90px;
             }
 
             .refresh-text-btn {
@@ -730,36 +738,14 @@
             }
 
             .header-add-btn {
-                width: 35px;
-                height: 35px;
-                font-size: 18px;
+                width: 32px;
+                height: 32px;
+                font-size: 16px;
             }
 
             .weekdays div {
                 padding: 6px 2px;
                 font-size: 0.75rem;
-            }
-
-            .days {
-                grid-auto-rows: minmax(60px, 1fr);
-            }
-
-            .day {
-                padding: 3px;
-            }
-
-            .day-number {
-                font-size: 0.8rem;
-                width: 22px;
-                height: 22px;
-                line-height: 22px;
-                margin-bottom: 2px;
-            }
-
-            .event-badge {
-                font-size: 0.6rem;
-                padding: 2px 4px;
-                border-radius: 3px;
             }
 
             .list-item-actions {
@@ -908,12 +894,11 @@
     </main>
 </div>
 
-<!-- MODAL WYDARZENIA (Dodawanie / Edycja / Usuwanie z poziomu dnia) -->
+<!-- MODAL WYDARZENIA -->
 <div class="modal-overlay" id="eventModal">
     <div class="modal-content">
         <div class="modal-header" id="modalTitleText">Nowe Wydarzenie</div>
         <div class="modal-body">
-            <!-- Lista istniejących wpisów w tym dniu do szybkiego usuwania/edycji -->
             <div id="dayExistingEventsContainer" style="margin-bottom: 15px; display: none;">
                 <label style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 5px; display: block;">Istniejące wpisy w tym dniu:</label>
                 <div id="dayEventsList" style="display: flex; flex-direction: column; gap: 6px;"></div>
@@ -940,9 +925,7 @@
             </div>
             <div class="form-group">
                 <label for="eventType">Kategoria</label>
-                <select id="eventType">
-                    <!-- Dynamicznie generowane kategorie -->
-                </select>
+                <select id="eventType"></select>
             </div>
         </div>
         <div class="modal-buttons">
@@ -993,7 +976,7 @@
     const categoriesListContainer = document.getElementById('categoriesListContainer');
 
     const filterBtns = document.querySelectorAll('.filter-btn');
-    let currentFilter = 'upcoming'; // 'upcoming', 'past', 'all'
+    let currentFilter = 'upcoming';
 
     const monthNames = [
         'Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec',
@@ -1018,7 +1001,6 @@
         location.reload();
     });
 
-    // PULL TO REFRESH
     const mainScrollContainer = document.getElementById('mainScrollContainer');
     const ptrIndicator = document.getElementById('ptrIndicator');
     let touchStartY = 0;
@@ -1417,7 +1399,6 @@
         }
     }, 30000);
 
-    // KLIKNIĘCIE W DZIEŃ KALENDARZA (Pokaże istniejące wpisy w tym dniu + formularz nowego)
     function openModalForDay(dateStr, day, monthName, year) {
         editDateKeyInput.value = '';
         editIndexInput.value = '';
@@ -1432,7 +1413,6 @@
         
         modalTitleText.textContent = `Dzień: ${day} ${monthName} ${year}`;
         
-        // Wyświetl listę wpisów w tym dniu w modalu, jeśli istnieją
         dayEventsList.innerHTML = '';
         if (eventsData[dateStr] && eventsData[dateStr].length > 0) {
             dayExistingEventsContainer.style.display = 'block';
@@ -1474,7 +1454,7 @@
                     localStorage.setItem('planerEvents', JSON.stringify(eventsData));
                     renderCalendar(currentMonth, currentYear);
                     if (eventsData[dateStr] && eventsData[dateStr].length > 0) {
-                        openModalForDay(dateStr, day, monthName, year); // odśwież modal
+                        openModalForDay(dateStr, day, monthName, year);
                     } else {
                         closeModal();
                     }
