@@ -1,18 +1,12 @@
-self.addEventListener('install', (e) => {
-  e.waitUntil(
-    caches.open('planer-store').then((cache) => {
-      return cache.addAll([
-        './index.html',
-        './manifest.json'
-      ]);
+// Automatyczne pobranie wersji z pliku version.txt na serwerze
+fetch('version.txt')
+    .then(response => response.text())
+    .then(version => {
+        const cleanVersion = version.trim();
+        document.getElementById('appVersionMainBadge').textContent = `v${cleanVersion}`;
+        document.getElementById('appVersionDisplay').textContent = cleanVersion;
     })
-  );
-});
-
-self.addEventListener('fetch', (e) => {
-  e.respondWith(
-    caches.match(e.request).then((response) => {
-      return response || fetch(e.request);
-    })
-  );
-});
+    .catch(error => {
+        // Wersja zapasowa, gdyby plik nie był dostępny lokalnie
+        console.log("Nie udało się pobrać wersji, używam domyślnej.");
+    });
