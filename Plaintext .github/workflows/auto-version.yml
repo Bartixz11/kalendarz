@@ -1,0 +1,41 @@
+name: Auto Increment Version
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pobierz kod projektu
+        uses: actions/checkout@v4
+
+      - name: Konfiguracja Gita
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Zwiększ numer wersji w pliku
+        run: |
+          CURRENT_VERSION=$(cat version.txt | tr -d '[:space:]')
+          echo "Obecna wersja: $CURRENT_VERSION"
+
+          MAJOR=$(echo $CURRENT_VERSION | cut -d. -f1)
+          MINOR=$(echo $CURRENT_VERSION | cut -d. -f2)
+
+          NEW_MINOR=$((MINOR + 1))
+          NEW_VERSION="$MAJOR.$NEW_MINOR"
+
+          echo "Nowa wersja: $NEW_VERSION"
+          echo "$NEW_VERSION" > version.txt
+
+      - name: Zapisz zmiany w repozytorium
+        run: |
+          git add version.txt
+          git commit -m "Automatyczna aktualizacja wersji na v$(cat version.txt) [skip ci]"
+          git push
