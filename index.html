@@ -50,33 +50,33 @@
 
         /* NAWIGACJA (Menu boczne/dolne) */
         nav {
-            width: 250px;
+            width: 240px;
             background-color: var(--surface-color);
             border-right: 1px solid var(--border);
             display: flex;
             flex-direction: column;
             padding: 20px 10px;
-            gap: 10px;
+            gap: 8px;
             transition: all 0.3s ease;
             z-index: 10;
         }
 
         .nav-logo {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 700;
             padding: 0 10px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             color: var(--accent);
             text-align: center;
         }
 
         .nav-item {
-            padding: 15px 20px;
+            padding: 12px 15px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: var(--text-muted);
             background-color: transparent;
             border-radius: 12px;
@@ -113,47 +113,51 @@
 
         .tab-content {
             display: none;
-            padding: 30px;
+            padding: 25px;
             animation: fadeIn 0.3s ease-in-out;
             height: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
         }
 
         .tab-content.active {
-            display: block;
+            display: flex;
+            flex-direction: column;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ZAKŁADKA 1: KALENDARZ */
+        /* ZAKŁADKA 1: KALENDARZ (Zoptymalizowany pod mobile) */
         .calendar-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             background-color: var(--surface-color);
-            padding: 15px 25px;
-            border-radius: 16px;
+            padding: 12px 20px;
+            border-radius: 14px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            position: relative;
+            border: 1px solid var(--border);
         }
 
         .month-nav-container {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
         }
 
         .calendar-header button.month-btn {
             background-color: var(--surface-hover);
             border: none;
             color: var(--text-main);
-            font-size: 18px;
+            font-size: 16px;
             cursor: pointer;
-            padding: 10px 15px;
-            border-radius: 10px;
+            padding: 8px 12px;
+            border-radius: 8px;
             transition: all 0.2s;
         }
 
@@ -162,21 +166,21 @@
         }
 
         .month-year {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: bold;
             text-transform: capitalize;
-            min-width: 150px;
+            min-width: 140px;
             text-align: center;
         }
 
         /* BĄBEL DO DODAWANIA NAD KALENDARZEM */
         .header-add-btn {
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background-color: var(--accent);
             color: white;
-            font-size: 24px;
+            font-size: 22px;
             border: none;
             cursor: pointer;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
@@ -187,7 +191,7 @@
         }
 
         .header-add-btn:hover {
-            transform: scale(1.1);
+            transform: scale(1.08);
             background-color: var(--accent-hover);
         }
 
@@ -196,10 +200,11 @@
             flex-direction: column;
             flex: 1;
             background-color: var(--surface-color);
-            border-radius: 16px;
+            border-radius: 14px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             border: 1px solid var(--border);
+            min-height: 450px;
         }
 
         .weekdays {
@@ -210,24 +215,24 @@
         }
 
         .weekdays div {
-            padding: 15px 10px;
+            padding: 10px 4px;
             text-align: center;
             font-weight: 600;
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         .days {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             flex: 1;
-            grid-auto-rows: minmax(100px, 1fr);
+            grid-auto-rows: minmax(80px, 1fr);
         }
 
         .day {
             border-right: 1px solid var(--border);
             border-bottom: 1px solid var(--border);
-            padding: 10px;
+            padding: 6px;
             cursor: pointer;
             transition: background-color 0.2s;
             position: relative;
@@ -245,18 +250,18 @@
         }
 
         .day.empty {
-            background-color: rgba(30, 41, 59, 0.5);
+            background-color: rgba(30, 41, 59, 0.3);
             cursor: default;
         }
 
         .day-number {
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             font-weight: 500;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             display: inline-block;
-            width: 30px;
-            height: 30px;
-            line-height: 30px;
+            width: 26px;
+            height: 26px;
+            line-height: 26px;
             text-align: center;
             border-radius: 50%;
         }
@@ -265,7 +270,7 @@
             background-color: var(--accent);
             color: white;
             font-weight: bold;
-            box-shadow: 0 2px 10px rgba(59, 130, 246, 0.5);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.5);
         }
 
         .events-container {
@@ -273,11 +278,11 @@
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
         }
 
         .events-container::-webkit-scrollbar {
-            width: 4px;
+            width: 3px;
         }
         .events-container::-webkit-scrollbar-thumb {
             background-color: var(--border);
@@ -285,46 +290,35 @@
         }
 
         .event-badge {
-            font-size: 0.75rem;
-            padding: 4px 8px;
-            border-radius: 6px;
+            font-size: 0.7rem;
+            padding: 3px 6px;
+            border-radius: 5px;
             color: white;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             background-color: var(--accent);
-            animation: fadeIn 0.2s ease-in-out;
         }
-
-        .event-badge.work { background-color: var(--danger); }
-        .event-badge.personal { background-color: var(--success); }
-        .event-badge.other { background-color: var(--warning); }
 
         /* ZAKŁADKA 2: LISTA WYDARZEŃ I WYSZUKIWARKA */
         .header-title {
-            font-size: 2rem;
-            margin-bottom: 20px;
+            font-size: 1.6rem;
+            margin-bottom: 15px;
             font-weight: bold;
         }
 
-        /* LUPKA / WYSZUKIWARKA */
         .search-container {
             display: flex;
             align-items: center;
-            background-color: var(--bg-color);
+            background-color: var(--surface-color);
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 10px 15px;
-            margin-bottom: 20px;
-            transition: border-color 0.2s;
-        }
-
-        .search-container:focus-within {
-            border-color: var(--accent);
+            margin-bottom: 15px;
         }
 
         .search-icon {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             margin-right: 10px;
             color: var(--text-muted);
         }
@@ -340,46 +334,43 @@
         
         .list-container {
             background-color: var(--surface-color);
-            border-radius: 16px;
-            padding: 20px;
+            border-radius: 14px;
+            padding: 15px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border);
         }
 
         .list-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px;
+            padding: 12px 10px;
             border-bottom: 1px solid var(--border);
-            transition: background-color 0.2s;
         }
 
         .list-item:last-child {
             border-bottom: none;
         }
 
-        .list-item:hover {
-            background-color: var(--surface-hover);
-        }
-
         .list-item-info strong {
             display: block;
-            font-size: 1.1rem;
-            margin-bottom: 5px;
+            font-size: 1rem;
+            margin-bottom: 3px;
         }
         
         .list-item-info span {
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         .delete-btn {
             background-color: rgba(239, 68, 68, 0.1);
             color: var(--danger);
             border: 1px solid transparent;
-            padding: 8px 15px;
+            padding: 6px 12px;
             border-radius: 8px;
             cursor: pointer;
+            font-size: 0.9rem;
             transition: all 0.2s;
         }
 
@@ -391,23 +382,24 @@
         .no-events {
             text-align: center;
             color: var(--text-muted);
-            padding: 30px;
+            padding: 20px;
             font-style: italic;
         }
 
         /* ZAKŁADKA 3: POWIADOMIENIA */
         .notif-form-container {
             background-color: var(--surface-color);
-            border-radius: 16px;
-            padding: 20px;
+            border-radius: 14px;
+            padding: 15px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
         }
 
         .notif-row {
             display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
+            gap: 12px;
+            margin-bottom: 12px;
         }
 
         .notif-row > div {
@@ -418,26 +410,21 @@
             width: 100%;
             background-color: var(--accent);
             color: white;
-            padding: 12px;
+            padding: 10px;
             border: none;
             border-radius: 10px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: opacity 0.2s;
-        }
-
-        .notif-btn:hover {
-            opacity: 0.9;
         }
 
         .notif-status {
-            font-size: 0.85rem;
-            padding: 4px 8px;
-            border-radius: 6px;
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            border-radius: 4px;
             background-color: rgba(16, 185, 129, 0.2);
             color: var(--success);
-            margin-left: 10px;
+            margin-left: 8px;
         }
 
         .notif-status.pending {
@@ -445,38 +432,59 @@
             color: var(--warning);
         }
 
-        /* ZAKŁADKA 4: USTAWIENIA */
+        /* ZAKŁADKA 4: KATEGORIE (NOWOŚĆ) */
+        .category-form {
+            background-color: var(--surface-color);
+            border-radius: 14px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+        }
+
+        .category-row {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .category-badge-preview {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* ZAKŁADKA 5: USTAWIENIA */
         .settings-group {
             background-color: var(--surface-color);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
+            border-radius: 14px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
         }
 
         .settings-group h3 {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             color: var(--text-muted);
-            font-size: 1rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
         .color-picker-container {
             display: flex;
-            gap: 15px;
+            gap: 12px;
         }
 
         .color-option {
-            width: 40px;
-            height: 40px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             cursor: pointer;
             border: 3px solid transparent;
-            transition: transform 0.2s, border-color 0.2s;
-        }
-
-        .color-option:hover {
-            transform: scale(1.1);
+            transition: transform 0.2s;
         }
 
         .color-option.active {
@@ -484,13 +492,12 @@
             transform: scale(1.1);
         }
 
-        /* MODAL (OKIENKO DODAWANIA WYDARZENIA) */
+        /* MODAL */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background-color: var(--glass-bg);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(4px);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -498,6 +505,7 @@
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s, visibility 0.3s;
+            padding: 15px;
         }
 
         .modal-overlay.active {
@@ -507,11 +515,11 @@
 
         .modal-content {
             background-color: var(--surface-color);
-            width: 90%;
-            max-width: 400px;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 380px;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
             transform: scale(0.9);
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border: 1px solid var(--border);
@@ -522,62 +530,48 @@
         }
 
         .modal-header {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-align: center;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         .form-group input, .form-group select, .form-group textarea {
             width: 100%;
-            padding: 12px 15px;
+            padding: 10px 12px;
             background-color: var(--bg-color);
             border: 1px solid var(--border);
             color: var(--text-main);
-            border-radius: 10px;
-            font-size: 1rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
             outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-        }
-
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            border-color: var(--accent);
         }
 
         .modal-buttons {
             display: flex;
-            gap: 15px;
-            margin-top: 25px;
+            gap: 10px;
+            margin-top: 20px;
         }
 
         .btn {
             flex: 1;
-            padding: 12px;
+            padding: 10px;
             border: none;
-            border-radius: 10px;
-            font-size: 1rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
-            transition: opacity 0.2s, transform 0.1s, background-color 0.2s;
-        }
-
-        .btn:active {
-            transform: scale(0.98);
         }
 
         .btn-cancel {
@@ -586,22 +580,18 @@
             border: 1px solid var(--border);
         }
 
-        .btn-cancel:hover {
-            background-color: var(--surface-hover);
-            color: var(--text-main);
-        }
-
         .btn-save {
             background-color: var(--accent);
             color: white;
         }
 
-        .btn-save:hover {
-            opacity: 0.9;
-        }
-
-        /* RESPONSYWNOŚĆ (Dla Telefonów) */
+        /* RESPONSYWNOŚĆ TELEFONY */
         @media (max-width: 768px) {
+            body {
+                height: 100vh;
+                height: -webkit-fill-available;
+            }
+
             .app-container {
                 flex-direction: column;
             }
@@ -610,13 +600,12 @@
                 width: 100%;
                 flex-direction: row;
                 justify-content: space-around;
-                padding: 10px;
-                gap: 5px;
+                padding: 6px 4px;
+                gap: 2px;
                 border-right: none;
                 border-top: 1px solid var(--border);
                 order: 2;
                 background-color: var(--surface-color);
-                box-shadow: 0 -4px 10px rgba(0,0,0,0.2);
             }
 
             .nav-logo {
@@ -625,75 +614,70 @@
 
             .nav-item {
                 flex-direction: column;
-                padding: 10px 2px;
-                font-size: 0.75rem;
+                padding: 6px 2px;
+                font-size: 0.7rem;
                 flex: 1;
                 text-align: center;
                 justify-content: center;
+                border-radius: 8px;
             }
 
             .nav-item span {
                 margin-left: 0;
-                margin-top: 5px;
+                margin-top: 3px;
+                font-size: 0.65rem;
             }
 
             main {
                 order: 1;
-                padding-bottom: 0;
+                height: calc(100vh - 60px);
             }
 
             .tab-content {
-                padding: 15px;
+                padding: 10px;
             }
 
             .calendar-header {
-                padding: 10px 15px;
+                padding: 8px 12px;
+                margin-bottom: 10px;
             }
 
             .month-year {
-                font-size: 1.2rem;
-                min-width: 120px;
+                font-size: 1.1rem;
+                min-width: 110px;
             }
 
             .header-add-btn {
-                width: 40px;
-                height: 40px;
-                font-size: 20px;
+                width: 35px;
+                height: 35px;
+                font-size: 18px;
             }
 
             .weekdays div {
-                padding: 10px 5px;
-                font-size: 0.8rem;
+                padding: 6px 2px;
+                font-size: 0.75rem;
             }
 
             .days {
-                grid-auto-rows: minmax(70px, 1fr);
+                grid-auto-rows: minmax(60px, 1fr);
             }
 
             .day {
-                padding: 5px;
+                padding: 3px;
             }
 
             .day-number {
-                font-size: 0.9rem;
-                width: 24px;
-                height: 24px;
-                line-height: 24px;
+                font-size: 0.8rem;
+                width: 22px;
+                height: 22px;
+                line-height: 22px;
+                margin-bottom: 2px;
             }
 
             .event-badge {
-                font-size: 0.65rem;
+                font-size: 0.6rem;
                 padding: 2px 4px;
-                border-radius: 4px;
-            }
-
-            .event-badge span {
-                display: block;
-            }
-
-            .notif-row {
-                flex-direction: column;
-                gap: 10px;
+                border-radius: 3px;
             }
         }
     </style>
@@ -713,6 +697,9 @@
         <div class="nav-item" data-target="tab-notifications">
             🔔 <span>Powiadomienia</span>
         </div>
+        <div class="nav-item" data-target="tab-categories">
+            🏷️ <span>Kategorie</span>
+        </div>
         <div class="nav-item" data-target="tab-settings">
             ⚙️ <span>Ustawienia</span>
         </div>
@@ -728,7 +715,6 @@
                     <div class="month-year" id="monthYear"></div>
                     <button class="month-btn" id="nextMonth">&#10095;</button>
                 </div>
-                <!-- Przeniesiony przycisk dodawania NAD kalendarzem -->
                 <button id="globalAddBtn" class="header-add-btn" aria-label="Dodaj nowe wydarzenie" title="Dodaj wydarzenie">+</button>
             </div>
             <div class="calendar-grid">
@@ -742,28 +728,21 @@
         <!-- ZAKŁADKA 2: LISTA WYDARZEŃ -->
         <div id="tab-events" class="tab-content">
             <h1 class="header-title">Nadchodzące wydarzenia</h1>
-            
-            <!-- NOWOŚĆ: LUPKA (Wyszukiwarka wydarzeń) -->
             <div class="search-container">
                 <span class="search-icon">🔍</span>
-                <input type="text" id="searchInput" class="search-input" placeholder="Wyszukaj wydarzenie po nazwie lub opisie...">
+                <input type="text" id="searchInput" class="search-input" placeholder="Wyszukaj wydarzenie...">
             </div>
-
-            <div class="list-container" id="eventsListContainer">
-                <!-- Lista wydarzeń generowana z JS -->
-            </div>
+            <div class="list-container" id="eventsListContainer"></div>
         </div>
 
-        <!-- ZAKŁADKA 3: POWIADOMIENIA (NOWOŚĆ) -->
+        <!-- ZAKŁADKA 3: POWIADOMIENIA -->
         <div id="tab-notifications" class="tab-content">
-            <h1 class="header-title">Zarządzaj powiadomieniami</h1>
-            
-            <!-- Formularz dodawania powiadomienia -->
+            <h1 class="header-title">Powiadomienia</h1>
             <div class="notif-form-container">
-                <h3 style="margin-bottom: 15px;">Dodaj nowe powiadomienie</h3>
+                <h3 style="margin-bottom: 10px; font-size: 1rem; color: var(--text-muted);">Nowe przypomnienie</h3>
                 <div class="form-group">
-                    <label>Tytuł powiadomienia</label>
-                    <input type="text" id="notifTitle" placeholder="np. Sprawdź pocztę" autocomplete="off">
+                    <label>Tytuł</label>
+                    <input type="text" id="notifTitle" placeholder="np. Wyłączyć piekarnik" autocomplete="off">
                 </div>
                 <div class="notif-row">
                     <div class="form-group" style="margin-bottom: 0;">
@@ -775,18 +754,34 @@
                         <input type="time" id="notifTime">
                     </div>
                 </div>
-                <button class="notif-btn" id="btnSaveNotif" style="margin-top: 15px;">Zaplanuj powiadomienie</button>
+                <button class="notif-btn" id="btnSaveNotif" style="margin-top: 12px;">Zaplanuj</button>
             </div>
-
-            <div class="list-container" id="notificationsListContainer">
-                <!-- Lista powiadomień generowana z JS -->
-            </div>
+            <div class="list-container" id="notificationsListContainer"></div>
         </div>
 
-        <!-- ZAKŁADKA 4: USTAWIENIA -->
+        <!-- ZAKŁADKA 4: KATEGORIE (NOWOŚĆ) -->
+        <div id="tab-categories" class="tab-content">
+            <h1 class="header-title">Zarządzaj Kategoriami</h1>
+            <div class="category-form">
+                <h3 style="margin-bottom: 10px; font-size: 1rem; color: var(--text-muted);">Dodaj nową kategorię</h3>
+                <div class="category-row">
+                    <div class="form-group" style="flex: 2; margin-bottom: 0;">
+                        <label>Nazwa (np. Szkoła)</label>
+                        <input type="text" id="catNameInput" placeholder="Nazwa kategorii" autocomplete="off">
+                    </div>
+                    <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                        <label>Kolor</label>
+                        <input type="color" id="catColorInput" value="#8b5cf6" style="height: 42px; padding: 4px; cursor: pointer;">
+                    </div>
+                    <button class="btn btn-save" id="btnAddCategory" style="height: 42px; flex: 1; margin-bottom: 0;">Dodaj</button>
+                </div>
+            </div>
+            <div class="list-container" id="categoriesListContainer"></div>
+        </div>
+
+        <!-- ZAKŁADKA 5: USTAWIENIA -->
         <div id="tab-settings" class="tab-content">
             <h1 class="header-title">Ustawienia</h1>
-            
             <div class="settings-group">
                 <h3>Motyw i Kolor Akcentu</h3>
                 <div class="color-picker-container">
@@ -796,55 +791,44 @@
                     <div class="color-option" style="background-color: #ef4444;" data-color="#ef4444"></div>
                     <div class="color-option" style="background-color: #f59e0b;" data-color="#f59e0b"></div>
                 </div>
-                <p style="margin-top: 15px; color: var(--text-muted); font-size: 0.9rem;">
-                    Wybierz kolor, który najbardziej Ci odpowiada. Zostanie on zapisany w pamięci przeglądarki.
-                </p>
             </div>
-
             <div class="settings-group">
-                <h3>Kopia zapasowa (Synchronizacja)</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">
-                    Skopiuj poniższy kod, aby zapisać historię wydarzeń. Wklej kod z innego urządzenia i wczytaj go, aby zaktualizować planer.
-                </p>
-                <textarea id="syncCodeInput" rows="4" style="width: 100%; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border); border-radius: 10px; padding: 10px; margin-bottom: 15px; font-family: monospace; resize: vertical;" placeholder="Tu pojawi się Twój kod, lub wklej tutaj kod z innego urządzenia..."></textarea>
-                
-                <div style="display: flex; gap: 15px;">
-                    <button class="btn btn-cancel" id="btnGenerateCode">Wygeneruj kod</button>
-                    <button class="btn btn-save" id="btnLoadCode">Wczytaj kod</button>
+                <h3>Kopia zapasowa</h3>
+                <textarea id="syncCodeInput" rows="3" style="width: 100%; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border); border-radius: 8px; padding: 8px; margin-bottom: 10px; font-family: monospace;" placeholder="Kod synchronizacji..."></textarea>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-cancel" id="btnGenerateCode">Eksport</button>
+                    <button class="btn btn-save" id="btnLoadCode">Import</button>
                 </div>
             </div>
         </div>
     </main>
 </div>
 
-<!-- MODAL DODAWANIA WYDARZENIA (DLA KALENDARZA) -->
+<!-- MODAL WYDARZENIA -->
 <div class="modal-overlay" id="eventModal">
     <div class="modal-content">
         <div class="modal-header">Nowe Wydarzenie</div>
         <div class="modal-body">
             <div class="form-group">
-                <label for="eventDateInput">Data wydarzenia</label>
+                <label for="eventDateInput">Data</label>
                 <input type="date" id="eventDateInput">
             </div>
             <div class="form-group">
-                <label for="eventTitle">Nazwa wydarzenia</label>
-                <input type="text" id="eventTitle" placeholder="np. Spotkanie z klientem" autocomplete="off">
+                <label for="eventTitle">Nazwa</label>
+                <input type="text" id="eventTitle" placeholder="np. Sprawdzian z matmy" autocomplete="off">
             </div>
             <div class="form-group">
                 <label for="eventDescription">Opis (opcjonalnie)</label>
-                <textarea id="eventDescription" rows="2" placeholder="Dodatkowe informacje, notatki..."></textarea>
+                <textarea id="eventDescription" rows="2" placeholder="Notatki..."></textarea>
             </div>
             <div class="form-group">
-                <label for="eventTime">Godzina (opcjonalnie)</label>
+                <label for="eventTime">Godzina</label>
                 <input type="time" id="eventTime">
             </div>
             <div class="form-group">
-                <label for="eventType">Rodzaj</label>
+                <label for="eventType">Kategoria</label>
                 <select id="eventType">
-                    <option value="default">Standardowe (Niebieski)</option>
-                    <option value="work">Praca (Czerwony)</option>
-                    <option value="personal">Prywatne (Zielony)</option>
-                    <option value="other">Inne (Pomarańczowy)</option>
+                    <!-- Dynamicznie generowane kategorie -->
                 </select>
             </div>
         </div>
@@ -856,40 +840,39 @@
 </div>
 
 <script>
-    // --- ZMIENNE GLOBALNE I DANE ---
     const monthYearDisplay = document.getElementById('monthYear');
     const daysContainer = document.getElementById('daysContainer');
     const eventsListContainer = document.getElementById('eventsListContainer');
     const prevMonthBtn = document.getElementById('prevMonth');
     const nextMonthBtn = document.getElementById('nextMonth');
-    
-    // Wyszukiwarka
     const searchInput = document.getElementById('searchInput');
 
-    // Elementy Modala i Przycisków
     const globalAddBtn = document.getElementById('globalAddBtn');
     const eventModal = document.getElementById('eventModal');
     const btnCancelModal = document.getElementById('btnCancelModal');
     const btnSaveEvent = document.getElementById('btnSaveEvent');
     
-    // Pola formularza
     const eventDateInput = document.getElementById('eventDateInput');
     const eventTitleInput = document.getElementById('eventTitle');
     const eventDescInput = document.getElementById('eventDescription');
     const eventTimeInput = document.getElementById('eventTime');
     const eventTypeInput = document.getElementById('eventType');
 
-    // Import/Eksport
     const syncCodeInput = document.getElementById('syncCodeInput');
     const btnGenerateCode = document.getElementById('btnGenerateCode');
     const btnLoadCode = document.getElementById('btnLoadCode');
 
-    // Elementy zakładki powiadomień
     const notifTitleInput = document.getElementById('notifTitle');
     const notifDateInput = document.getElementById('notifDate');
     const notifTimeInput = document.getElementById('notifTime');
     const btnSaveNotif = document.getElementById('btnSaveNotif');
     const notificationsListContainer = document.getElementById('notificationsListContainer');
+
+    // Elementy Kategorii
+    const catNameInput = document.getElementById('catNameInput');
+    const catColorInput = document.getElementById('catColorInput');
+    const btnAddCategory = document.getElementById('btnAddCategory');
+    const categoriesListContainer = document.getElementById('categoriesListContainer');
 
     const monthNames = [
         'Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec',
@@ -900,11 +883,96 @@
     let currentMonth = currentDate.getMonth();
     let currentYear = currentDate.getFullYear();
 
-    // Dane ładowane z localStorage
     let eventsData = JSON.parse(localStorage.getItem('planerEvents')) || {};
     let notificationsData = JSON.parse(localStorage.getItem('planerNotifications')) || [];
+    
+    // Domyślne kategorie, jeśli użytkownik jeszcze nie miał własnych
+    let categoriesData = JSON.parse(localStorage.getItem('planerCategories')) || [
+        { id: 'default', name: 'Standardowe', color: '#3b82f6' },
+        { id: 'work', name: 'Praca', color: '#ef4444' },
+        { id: 'personal', name: 'Prywatne', color: '#10b981' },
+        { id: 'school', name: 'Szkoła', color: '#8b5cf6' }
+    ];
 
-    // --- FUNKCJE KALENDARZA ---
+    function saveCategoriesToStorage() {
+        localStorage.setItem('planerCategories', JSON.stringify(categoriesData));
+    }
+
+    function updateCategorySelect() {
+        eventTypeInput.innerHTML = '';
+        categoriesData.forEach(cat => {
+            const opt = document.createElement('option');
+            opt.value = cat.id;
+            opt.textContent = cat.name;
+            eventTypeInput.appendChild(opt);
+        });
+    }
+
+    function renderCategoriesList() {
+        categoriesListContainer.innerHTML = '';
+        if (categoriesData.length === 0) {
+            categoriesListContainer.innerHTML = '<div class="no-events">Brak zdefiniowanych kategorii.</div>';
+            return;
+        }
+
+        categoriesData.forEach((cat, index) => {
+            const item = document.createElement('div');
+            item.classList.add('list-item');
+
+            const info = document.createElement('div');
+            info.classList.add('list-item-info');
+            info.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="width: 16px; height: 16px; background-color: ${cat.color}; border-radius: 4px; display: inline-block;"></span>
+                    <strong>${cat.name}</strong>
+                </div>
+            `;
+
+            const delBtn = document.createElement('button');
+            delBtn.classList.add('delete-btn');
+            delBtn.textContent = 'Usuń';
+            // Nie pozwól usunąć domyślnej kategorii "default" żeby uniknąć błędów
+            if (cat.id === 'default') {
+                delBtn.style.opacity = '0.4';
+                delBtn.style.cursor = 'not-allowed';
+                delBtn.onclick = () => alert('Nie można usunąć domyślnej kategorii.');
+            } else {
+                delBtn.onclick = () => deleteCategory(index);
+            }
+
+            item.appendChild(info);
+            item.appendChild(delBtn);
+            categoriesListContainer.appendChild(item);
+        });
+    }
+
+    btnAddCategory.addEventListener('click', () => {
+        const name = catNameInput.value.trim();
+        const color = catColorInput.value;
+
+        if (!name) {
+            alert('Wpisz nazwę kategorii!');
+            return;
+        }
+
+        const id = 'cat_' + Date.now();
+        categoriesData.push({ id, name, color });
+        saveCategoriesToStorage();
+        updateCategorySelect();
+        renderCategoriesList();
+
+        catNameInput.value = '';
+    });
+
+    function deleteCategory(index) {
+        if (confirm('Usunąć tę kategorię?')) {
+            categoriesData.splice(index, 1);
+            saveCategoriesToStorage();
+            updateCategorySelect();
+            renderCategoriesList();
+        }
+    }
+
     function renderCalendar(month, year) {
         daysContainer.innerHTML = '';
         monthYearDisplay.textContent = `${monthNames[month]} ${year}`;
@@ -940,20 +1008,22 @@
             eventsCont.classList.add('events-container');
 
             if (eventsData[dateStr]) {
-                eventsData[dateStr].sort((a, b) => a.time.localeCompare(b.time));
+                eventsData[dateStr].sort((a, b) => (a.time || '').localeCompare(b.time || ''));
 
                 eventsData[dateStr].forEach(ev => {
                     const evBadge = document.createElement('div');
                     evBadge.classList.add('event-badge');
-                    if (ev.type !== 'default') evBadge.classList.add(ev.type);
                     
+                    // Pobierz kolor przypisany do kategorii wydarzenia
+                    const catObj = categoriesData.find(c => c.id === ev.type);
+                    if (catObj) {
+                        evBadge.style.backgroundColor = catObj.color;
+                    }
+
                     const timeText = ev.time ? `${ev.time} ` : '';
                     evBadge.innerHTML = `<span>${timeText}${ev.title}</span>`;
                     
-                    if (ev.desc) {
-                        evBadge.title = ev.desc;
-                    }
-                    
+                    if (ev.desc) evBadge.title = ev.desc;
                     eventsCont.appendChild(evBadge);
                 });
             }
@@ -964,7 +1034,6 @@
         }
     }
 
-    // --- FUNKCJE OBSŁUGI ZAKŁADEK (TABS) ---
     const navItems = document.querySelectorAll('.nav-item');
     const tabContents = document.querySelectorAll('.tab-content');
 
@@ -981,19 +1050,16 @@
                 renderEventsList();
             } else if (targetId === 'tab-notifications') {
                 renderNotificationsList();
-                // Prośba o uprawnienia przy wejściu do zakładki
-                if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
-                    Notification.requestPermission();
-                }
+            } else if (targetId === 'tab-categories') {
+                renderCategoriesList();
             }
         });
     });
 
-    // --- WIDOK LISTY WYDARZEŃ I LUPKA ---
     function renderEventsList(searchQuery = '') {
         eventsListContainer.innerHTML = '';
-        
         let allEvents = [];
+        
         for (const dateStr in eventsData) {
             const [y, m, d] = dateStr.split('-').map(Number);
             eventsData[dateStr].forEach((ev, index) => {
@@ -1010,12 +1076,10 @@
 
         allEvents.sort((a, b) => a.dateObj - b.dateObj);
 
-        // Filtrowanie - pokazuj od dzisiaj wzwyż
         const now = new Date();
         now.setHours(0,0,0,0);
         let upcomingEvents = allEvents.filter(ev => ev.dateObj >= now);
 
-        // Zastosowanie wyszukiwarki (Lupki)
         if (searchQuery.trim() !== '') {
             const query = searchQuery.toLowerCase();
             upcomingEvents = upcomingEvents.filter(ev => 
@@ -1025,7 +1089,7 @@
         }
 
         if (upcomingEvents.length === 0) {
-            eventsListContainer.innerHTML = `<div class="no-events">${searchQuery ? 'Nie znaleziono wydarzeń pasujących do zapytania.' : 'Brak nadchodzących wydarzeń.'}</div>`;
+            eventsListContainer.innerHTML = `<div class="no-events">${searchQuery ? 'Brak wyników wyszukiwania.' : 'Brak nadchodzących wydarzeń.'}</div>`;
             return;
         }
 
@@ -1033,14 +1097,17 @@
             const item = document.createElement('div');
             item.classList.add('list-item');
             
+            const catObj = categoriesData.find(c => c.id === ev.type);
+            const catBadgeHtml = catObj ? `<span style="background-color: ${catObj.color}; color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; margin-left: 6px;">${catObj.name}</span>` : '';
+
             const info = document.createElement('div');
             info.classList.add('list-item-info');
             
             const timeStr = ev.time ? ` o ${ev.time}` : '';
-            const descHtml = ev.desc ? `<div style="margin-top: 8px; font-size: 0.9rem; color: var(--text-muted); background: var(--bg-color); padding: 10px; border-radius: 8px; border: 1px solid var(--border);">${ev.desc}</div>` : '';
+            const descHtml = ev.desc ? `<div style="margin-top: 6px; font-size: 0.85rem; color: var(--text-muted);">${ev.desc}</div>` : '';
             
             info.innerHTML = `
-                <strong>${ev.title}</strong>
+                <div><strong>${ev.title}</strong> ${catBadgeHtml}</div>
                 <span>${ev.displayDate}${timeStr}</span>
                 ${descHtml}
             `;
@@ -1056,21 +1123,15 @@
         });
     }
 
-    // Podpięcie wyszukiwarki do wpisywania tekstu
-    searchInput.addEventListener('input', (e) => {
-        renderEventsList(e.target.value);
-    });
+    searchInput.addEventListener('input', (e) => renderEventsList(e.target.value));
 
-    // --- SYSTEM POWIADOMIEŃ ---
     function renderNotificationsList() {
         notificationsListContainer.innerHTML = '';
-        
         if (notificationsData.length === 0) {
-            notificationsListContainer.innerHTML = '<div class="no-events">Nie masz jeszcze żadnych zaplanowanych powiadomień.</div>';
+            notificationsListContainer.innerHTML = '<div class="no-events">Brak zaplanowanych powiadomień.</div>';
             return;
         }
 
-        // Sortowanie po dacie/czasie wykonania
         notificationsData.sort((a, b) => new Date(a.fullDateTime) - new Date(b.fullDateTime));
 
         notificationsData.forEach((notif, index) => {
@@ -1080,14 +1141,11 @@
             const info = document.createElement('div');
             info.classList.add('list-item-info');
             
-            const isFired = notif.fired;
-            const statusHtml = isFired 
-                ? '<span class="notif-status">Wysłano</span>' 
-                : '<span class="notif-status pending">Oczekuje</span>';
+            const statusHtml = notif.fired ? '<span class="notif-status">Wysłano</span>' : '<span class="notif-status pending">Oczekuje</span>';
 
             info.innerHTML = `
                 <strong>${notif.title} ${statusHtml}</strong>
-                <span>Zaplanowano na: ${notif.dateStr} o ${notif.timeStr}</span>
+                <span>Na kiedy: ${notif.dateStr} o ${notif.timeStr}</span>
             `;
 
             const delBtn = document.createElement('button');
@@ -1107,70 +1165,50 @@
         const timeStr = notifTimeInput.value;
 
         if (!title || !dateStr || !timeStr) {
-            alert('Wypełnij wszystkie pola: tytuł, datę oraz godzinę!');
+            alert('Wypełnij wszystkie pola powiadomienia!');
             return;
         }
 
         const fullDateTime = new Date(`${dateStr}T${timeStr}`);
-        
         if (fullDateTime <= new Date()) {
             alert('Czas powiadomienia musi być w przyszłości!');
             return;
         }
 
-        // Prośba o zgodę na powiadomienia, jeśli jeszcze nie ma
         if (Notification.permission !== 'granted') {
             Notification.requestPermission();
         }
 
-        notificationsData.push({
-            title: title,
-            dateStr: dateStr,
-            timeStr: timeStr,
-            fullDateTime: fullDateTime.toISOString(),
-            fired: false
-        });
-
+        notificationsData.push({ title, dateStr, timeStr, fullDateTime: fullDateTime.toISOString(), fired: false });
         localStorage.setItem('planerNotifications', JSON.stringify(notificationsData));
         
-        // Czyszczenie formularza
         notifTitleInput.value = '';
         notifDateInput.value = '';
         notifTimeInput.value = '';
-
         renderNotificationsList();
     });
 
     function deleteNotification(index) {
-        if (confirm('Usunąć to powiadomienie?')) {
+        if (confirm('Usunąć powiadomienie?')) {
             notificationsData.splice(index, 1);
             localStorage.setItem('planerNotifications', JSON.stringify(notificationsData));
             renderNotificationsList();
         }
     }
 
-    // SILNIK SPRAWDZAJĄCY POWIADOMIENIA (uruchamiany co 30 sekund)
     setInterval(() => {
         const now = new Date();
         let updated = false;
 
         notificationsData.forEach((notif) => {
-            if (!notif.fired) {
-                const notifTime = new Date(notif.fullDateTime);
-                if (now >= notifTime) {
-                    // Wywołanie powiadomienia
-                    if (Notification.permission === 'granted') {
-                        new Notification("Planer Przypomina:", {
-                            body: notif.title,
-                            icon: 'icon-192.png'
-                        });
-                    } else {
-                        // Zabezpieczenie jeśli zgoda nie została udzielona
-                        alert(`🔔 PRZYPOMNIENIE: ${notif.title}`);
-                    }
-                    notif.fired = true;
-                    updated = true;
+            if (!notif.fired && now >= new Date(notif.fullDateTime)) {
+                if (Notification.permission === 'granted') {
+                    new Notification("Planer Przypomina:", { body: notif.title });
+                } else {
+                    alert(`🔔 PRZYPOMNIENIE: ${notif.title}`);
                 }
+                notif.fired = true;
+                updated = true;
             }
         });
 
@@ -1182,36 +1220,25 @@
         }
     }, 30000);
 
-
-    // --- FUNKCJE MODALA I DODAWANIA (WYDARZENIA) ---
     function openModal(dateStr = null, day = null, monthName = null, year = null) {
         eventTitleInput.value = '';
         eventTimeInput.value = '';
         eventDescInput.value = '';
-        eventTypeInput.value = 'default';
+        updateCategorySelect();
         
         if (dateStr) {
             const [y, m, d] = dateStr.split('-');
-            const formattedMonth = String(parseInt(m) + 1).padStart(2, '0');
-            const formattedDay = String(d).padStart(2, '0');
-            eventDateInput.value = `${y}-${formattedMonth}-${formattedDay}`;
+            eventDateInput.value = `${y}-${String(parseInt(m)+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
             document.querySelector('.modal-header').textContent = `Wydarzenie: ${day} ${monthName}`;
         } else {
             const today = new Date();
-            const y = today.getFullYear();
-            const m = String(today.getMonth() + 1).padStart(2, '0');
-            const d = String(today.getDate()).padStart(2, '0');
-            eventDateInput.value = `${y}-${m}-${d}`;
+            eventDateInput.value = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
             document.querySelector('.modal-header').textContent = `Nowe Wydarzenie`;
         }
-        
         eventModal.classList.add('active');
-        setTimeout(() => eventTitleInput.focus(), 100); 
     }
 
-    function closeModal() {
-        eventModal.classList.remove('active');
-    }
+    function closeModal() { eventModal.classList.remove('active'); }
 
     function saveEvent() {
         const title = eventTitleInput.value.trim();
@@ -1220,159 +1247,99 @@
         const type = eventTypeInput.value;
         const dateVal = eventDateInput.value; 
 
-        if (!title) {
-            alert('Wprowadź nazwę wydarzenia!');
-            return;
-        }
-        if (!dateVal) {
-            alert('Wybierz datę wydarzenia!');
+        if (!title || !dateVal) {
+            alert('Podaj nazwę i datę wydarzenia!');
             return;
         }
 
         const [yStr, mStr, dStr] = dateVal.split('-');
         const dateStr = `${parseInt(yStr)}-${parseInt(mStr) - 1}-${parseInt(dStr)}`;
 
-        if (!eventsData[dateStr]) {
-            eventsData[dateStr] = [];
-        }
-
+        if (!eventsData[dateStr]) eventsData[dateStr] = [];
         eventsData[dateStr].push({ title, time, type, desc });
         localStorage.setItem('planerEvents', JSON.stringify(eventsData));
 
         renderCalendar(currentMonth, currentYear);
-        
-        if (document.getElementById('tab-events').classList.contains('active')) {
-            renderEventsList(searchInput.value);
-        }
-        
+        if (document.getElementById('tab-events').classList.contains('active')) renderEventsList(searchInput.value);
         closeModal();
     }
 
     function deleteEvent(dateStr, index) {
-        if (confirm('Na pewno chcesz usunąć to wydarzenie?')) {
+        if (confirm('Usunąć to wydarzenie?')) {
             eventsData[dateStr].splice(index, 1);
-            
-            if (eventsData[dateStr].length === 0) {
-                delete eventsData[dateStr];
-            }
-            
+            if (eventsData[dateStr].length === 0) delete eventsData[dateStr];
             localStorage.setItem('planerEvents', JSON.stringify(eventsData));
-            
             renderEventsList(searchInput.value);
             renderCalendar(currentMonth, currentYear);
         }
     }
 
-    // --- FUNKCJE IMPORTU/EKSPORTU ---
     btnGenerateCode.addEventListener('click', () => {
         if (Object.keys(eventsData).length === 0) {
-            alert('Twój kalendarz jest pusty, nie ma czego eksportować.');
+            alert('Brak danych do eksportu.');
             return;
         }
-        
-        const dataStr = JSON.stringify(eventsData);
-        const base64Code = btoa(encodeURIComponent(dataStr));
-        syncCodeInput.value = base64Code;
-        
+        syncCodeInput.value = btoa(encodeURIComponent(JSON.stringify(eventsData)));
         syncCodeInput.select();
-        alert('Kod wygenerowany! Został zaznaczony - skopiuj go i zapisz w bezpiecznym miejscu.');
+        alert('Kod wygenerowany i zaznaczony!');
     });
 
     btnLoadCode.addEventListener('click', () => {
         const code = syncCodeInput.value.trim();
-        if (!code) {
-            alert('Proszę, wklej kod do pola tekstowego przed wczytaniem.');
-            return;
-        }
-
+        if (!code) return alert('Wklej kod.');
         try {
-            const decodedDataStr = decodeURIComponent(atob(code));
-            const parsedData = JSON.parse(decodedDataStr);
-            
-            if (confirm('UWAGA: Wczytanie kodu całkowicie NADPISZE aktualne wydarzenia. Czy na pewno chcesz kontynuować?')) {
-                eventsData = parsedData;
-                localStorage.setItem('planerEvents', JSON.stringify(eventsData));
-                
-                renderCalendar(currentMonth, currentYear);
-                syncCodeInput.value = '';
-                alert('Historia wydarzeń została pomyślnie zaktualizowana!');
-            }
+            eventsData = JSON.parse(decodeURIComponent(atob(code)));
+            localStorage.setItem('planerEvents', JSON.stringify(eventsData));
+            renderCalendar(currentMonth, currentYear);
+            alert('Wczytano pomyślnie!');
         } catch (e) {
-            console.error(e);
-            alert('Błędny kod! Upewnij się, że wkleiłeś prawidłowy, kompletny ciąg znaków.');
+            alert('Błędny kod!');
         }
     });
 
-    // --- ZARZĄDZANIE KOLORAMI ---
     const colorOptions = document.querySelectorAll('.color-option');
     const savedColor = localStorage.getItem('planerAccentColor');
-    
     if (savedColor) {
         document.documentElement.style.setProperty('--accent', savedColor);
-        colorOptions.forEach(opt => {
-            if (opt.getAttribute('data-color') === savedColor) {
-                opt.classList.add('active');
-            } else {
-                opt.classList.remove('active');
-            }
-        });
+        colorOptions.forEach(opt => opt.classList.toggle('active', opt.getAttribute('data-color') === savedColor));
     }
 
     colorOptions.forEach(option => {
         option.addEventListener('click', () => {
             colorOptions.forEach(opt => opt.classList.remove('active'));
             option.classList.add('active');
-            
             const color = option.getAttribute('data-color');
             document.documentElement.style.setProperty('--accent', color);
             localStorage.setItem('planerAccentColor', color);
         });
     });
 
-    // --- EVENT LISTENERY ---
     prevMonthBtn.addEventListener('click', () => {
         currentMonth--;
-        if (currentMonth < 0) {
-            currentMonth = 11;
-            currentYear--;
-        }
+        if (currentMonth < 0) { currentMonth = 11; currentYear--; }
         renderCalendar(currentMonth, currentYear);
     });
 
     nextMonthBtn.addEventListener('click', () => {
         currentMonth++;
-        if (currentMonth > 11) {
-            currentMonth = 0;
-            currentYear++;
-        }
+        if (currentMonth > 11) { currentMonth = 0; currentYear++; }
         renderCalendar(currentMonth, currentYear);
     });
 
     btnCancelModal.addEventListener('click', closeModal);
     btnSaveEvent.addEventListener('click', saveEvent);
-    
     globalAddBtn.addEventListener('click', () => openModal(null));
-    
-    eventModal.addEventListener('click', (e) => {
-        if (e.target === eventModal) closeModal();
-    });
+    eventModal.addEventListener('click', (e) => { if (e.target === eventModal) closeModal(); });
 
-    // --- INICJALIZACJA STARTOWA ---
+    updateCategorySelect();
     renderCalendar(currentMonth, currentYear);
 
-    // Zapytanie o powiadomienia, żeby przeglądarka była gotowa na mechanizm
     if ('Notification' in window && Notification.permission !== 'granted' && Notification.permission !== 'denied') {
-         setTimeout(() => Notification.requestPermission(), 3000);
+        setTimeout(() => Notification.requestPermission(), 3000);
     }
 
-    // --- PWA: REJESTRACJA SW ---
     if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('sw.js')
-                .catch(error => {
-                    console.error('Błąd rejestracji SW:', error);
-                });
-        });
+        window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(()=>{}); });
     }
 </script>
 </body>
