@@ -148,7 +148,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ZAKŁADKA 1: KALENDARZ */
+        /* ZAKŁADKA 1: KALENDARZ (STRONA GŁÓWNA) */
         .calendar-header {
             display: flex;
             justify-content: space-between;
@@ -196,6 +196,18 @@
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+
+        /* Styl etykiety wersji na stronie głównej */
+        .version-badge {
+            background-color: var(--surface-hover);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            white-space: nowrap;
         }
 
         .refresh-text-btn {
@@ -248,7 +260,7 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             border: 1px solid var(--border);
-            min-height: 0; /* Kluczowe dla poprawnego dopasowania flexa */
+            min-height: 0;
         }
 
         .weekdays {
@@ -270,7 +282,7 @@
         .days {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            grid-template-rows: repeat(6, 1fr); /* 6 rzędów gwarantuje stabilną wysokość i brak kurczenia */
+            grid-template-rows: repeat(6, 1fr);
             flex: 1;
             height: 100%;
         }
@@ -350,7 +362,7 @@
             flex-shrink: 0;
         }
 
-        /* INNE ZAKŁADKI (Wspólne style) */
+        /* INNE ZAKŁADKI */
         .header-title {
             font-size: 1.6rem;
             margin-bottom: 15px;
@@ -669,7 +681,7 @@
             color: white;
         }
 
-        /* RESPONSYWNOŚĆ TELEFONY - ZAKŁADKI NA GÓRZE */
+        /* RESPONSYWNOŚĆ TELEFONY */
         @media (max-width: 768px) {
             body {
                 height: 100vh;
@@ -732,6 +744,11 @@
                 min-width: 90px;
             }
 
+            .version-badge {
+                padding: 5px 6px;
+                font-size: 0.7rem;
+            }
+
             .refresh-text-btn {
                 padding: 5px 8px;
                 font-size: 0.75rem;
@@ -764,7 +781,7 @@
 <body>
 
 <div class="app-container">
-    <!-- MENU (Na telefonach u góry, na komputerze z boku) -->
+    <!-- MENU -->
     <nav>
         <div class="nav-logo">Planer</div>
         <div class="nav-item active" data-target="tab-calendar">
@@ -786,10 +803,10 @@
 
     <!-- GŁÓWNA ZAWARTOŚĆ -->
     <main id="mainScrollContainer">
-        <!-- Wskaźnik przeciągnięcia do odświeżenia -->
+        <!-- Wskaźnik przeciągnięcia -->
         <div class="ptr-indicator" id="ptrIndicator">🔄 Pociągnij, aby odświeżyć...</div>
 
-        <!-- ZAKŁADKA 1: KALENDARZ -->
+        <!-- ZAKŁADKA 1: KALENDARZ (STRONA GŁÓWNA) -->
         <div id="tab-calendar" class="tab-content active">
             <div class="calendar-header">
                 <div class="month-nav-container">
@@ -798,6 +815,8 @@
                     <button class="month-btn" id="nextMonth">&#10095;</button>
                 </div>
                 <div class="header-actions">
+                    <!-- Wersja widoczna na stronie głównej -->
+                    <div class="version-badge" id="appVersionMainBadge">v1.1</div>
                     <button class="refresh-text-btn" id="refreshBtn" title="Odśwież stronę">🔄 Odśwież</button>
                     <button id="globalAddBtn" class="header-add-btn" aria-label="Dodaj nowe wydarzenie" title="Dodaj wydarzenie">+</button>
                 </div>
@@ -883,6 +902,10 @@
                 </div>
             </div>
             <div class="settings-group">
+                <h3>Informacje o aplikacji</h3>
+                <p style="font-size: 0.95rem; color: var(--text-muted);">Wersja aplikacji: <strong id="appVersionDisplay" style="color: var(--text-main);">1.1</strong></p>
+            </div>
+            <div class="settings-group">
                 <h3>Kopia zapasowa</h3>
                 <textarea id="syncCodeInput" rows="3" style="width: 100%; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border); border-radius: 8px; padding: 8px; margin-bottom: 10px; font-family: monospace;" placeholder="Kod synchronizacji..."></textarea>
                 <div style="display: flex; gap: 10px;">
@@ -936,6 +959,11 @@
 </div>
 
 <script>
+    // Konfiguracja wersji aplikacji (zmień tutaj, a zaktualizuje się na stronie głównej i w ustawieniach!)
+    const APP_VERSION = "1.1";
+    document.getElementById('appVersionMainBadge').textContent = `v${APP_VERSION}`;
+    document.getElementById('appVersionDisplay').textContent = APP_VERSION;
+
     const monthYearDisplay = document.getElementById('monthYear');
     const daysContainer = document.getElementById('daysContainer');
     const eventsListContainer = document.getElementById('eventsListContainer');
