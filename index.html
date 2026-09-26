@@ -49,7 +49,7 @@
             height: 100%;
         }
 
-        /* NAWIGACJA (Menu boczne/dolne) */
+        /* NAWIGACJA (Menu boczne domyślnie) */
         nav {
             width: 240px;
             background-color: var(--surface-color);
@@ -191,7 +191,6 @@
             text-align: center;
         }
 
-        /* DYSKRETNY PRZYCISK ODŚWIEŻ I DODAJ */
         .header-actions {
             display: flex;
             align-items: center;
@@ -349,6 +348,38 @@
             font-size: 1.6rem;
             margin-bottom: 15px;
             font-weight: bold;
+        }
+
+        .filter-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .filter-btn {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            background-color: var(--surface-hover);
+            color: var(--text-main);
+        }
+
+        .filter-btn.active {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            font-weight: 600;
         }
 
         .search-container {
@@ -553,13 +584,16 @@
         .modal-content {
             background-color: var(--surface-color);
             width: 100%;
-            max-width: 380px;
+            max-width: 400px;
             border-radius: 16px;
             padding: 20px;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
             transform: scale(0.9);
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border: 1px solid var(--border);
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .modal-overlay.active .modal-content {
@@ -571,6 +605,12 @@
             font-weight: bold;
             margin-bottom: 15px;
             text-align: center;
+        }
+
+        .modal-body {
+            overflow-y: auto;
+            flex: 1;
+            padding-right: 2px;
         }
 
         .form-group {
@@ -622,7 +662,7 @@
             color: white;
         }
 
-        /* RESPONSYWNOŚĆ TELEFONY */
+        /* RESPONSYWNOŚĆ TELEFONY - ZAKŁADKI NA GÓRZE */
         @media (max-width: 768px) {
             body {
                 height: 100vh;
@@ -640,8 +680,8 @@
                 padding: 6px 4px;
                 gap: 2px;
                 border-right: none;
-                border-top: 1px solid var(--border);
-                order: 2;
+                border-bottom: 1px solid var(--border);
+                order: 1; /* Zakładki na samej górze */
                 background-color: var(--surface-color);
             }
 
@@ -666,7 +706,7 @@
             }
 
             main {
-                order: 1;
+                order: 2; /* Zawartość pod zakładkami */
                 height: calc(100vh - 60px);
             }
 
@@ -738,7 +778,7 @@
 <body>
 
 <div class="app-container">
-    <!-- MENU BOCZNE / DOLNE -->
+    <!-- MENU (Na telefonach u góry, na komputerze z boku) -->
     <nav>
         <div class="nav-logo">Planer</div>
         <div class="nav-item active" data-target="tab-calendar">
@@ -786,7 +826,12 @@
 
         <!-- ZAKŁADKA 2: LISTA WYDARZEŃ -->
         <div id="tab-events" class="tab-content">
-            <h1 class="header-title">Nadchodzące wydarzenia</h1>
+            <h1 class="header-title">Wydarzenia</h1>
+            <div class="filter-container">
+                <button class="filter-btn active" data-filter="upcoming">Nadchodzące</button>
+                <button class="filter-btn" data-filter="past">Przeminięte</button>
+                <button class="filter-btn" data-filter="all">Wszystkie</button>
+            </div>
             <div class="search-container">
                 <span class="search-icon">🔍</span>
                 <input type="text" id="searchInput" class="search-input" placeholder="Wyszukaj wydarzenie...">
@@ -863,11 +908,18 @@
     </main>
 </div>
 
-<!-- MODAL WYDARZENIA (Dodawanie / Edycja) -->
+<!-- MODAL WYDARZENIA (Dodawanie / Edycja / Usuwanie z poziomu dnia) -->
 <div class="modal-overlay" id="eventModal">
     <div class="modal-content">
         <div class="modal-header" id="modalTitleText">Nowe Wydarzenie</div>
         <div class="modal-body">
+            <!-- Lista istniejących wpisów w tym dniu do szybkiego usuwania/edycji -->
+            <div id="dayExistingEventsContainer" style="margin-bottom: 15px; display: none;">
+                <label style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 5px; display: block;">Istniejące wpisy w tym dniu:</label>
+                <div id="dayEventsList" style="display: flex; flex-direction: column; gap: 6px;"></div>
+                <hr style="border: none; border-top: 1px solid var(--border); margin: 15px 0 10px 0;">
+            </div>
+
             <input type="hidden" id="editDateKey">
             <input type="hidden" id="editIndex">
             <div class="form-group">
@@ -895,7 +947,7 @@
         </div>
         <div class="modal-buttons">
             <button class="btn btn-cancel" id="btnCancelModal">Anuluj</button>
-            <button class="btn btn-save" id="btnSaveEvent">Zapisz</button>
+            <button class="btn btn-save" id="btnSaveEvent">Zapisz nowy / Dodaj</button>
         </div>
     </div>
 </div>
@@ -922,6 +974,8 @@
     const eventDescInput = document.getElementById('eventDescription');
     const eventTimeInput = document.getElementById('eventTime');
     const eventTypeInput = document.getElementById('eventType');
+    const dayExistingEventsContainer = document.getElementById('dayExistingEventsContainer');
+    const dayEventsList = document.getElementById('dayEventsList');
 
     const syncCodeInput = document.getElementById('syncCodeInput');
     const btnGenerateCode = document.getElementById('btnGenerateCode');
@@ -937,6 +991,9 @@
     const catColorInput = document.getElementById('catColorInput');
     const btnAddCategory = document.getElementById('btnAddCategory');
     const categoriesListContainer = document.getElementById('categoriesListContainer');
+
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    let currentFilter = 'upcoming'; // 'upcoming', 'past', 'all'
 
     const monthNames = [
         'Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec',
@@ -957,12 +1014,11 @@
         { id: 'school', name: 'Szkoła', color: '#8b5cf6' }
     ];
 
-    // Obsługa przycisku Odśwież
     refreshBtn.addEventListener('click', () => {
         location.reload();
     });
 
-    // PULL TO REFRESH (Przeciągnij palcem w dół, aby odświeżyć)
+    // PULL TO REFRESH
     const mainScrollContainer = document.getElementById('mainScrollContainer');
     const ptrIndicator = document.getElementById('ptrIndicator');
     let touchStartY = 0;
@@ -1140,7 +1196,7 @@
             }
 
             dayDiv.appendChild(eventsCont);
-            dayDiv.addEventListener('click', () => openModalForAdd(dateStr, i, monthNames[month], year));
+            dayDiv.addEventListener('click', () => openModalForDay(dateStr, i, monthNames[month], year));
             daysContainer.appendChild(dayDiv);
         }
     }
@@ -1167,6 +1223,15 @@
         });
     });
 
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = btn.getAttribute('data-filter');
+            renderEventsList(searchInput.value);
+        });
+    });
+
     function renderEventsList(searchQuery = '') {
         eventsListContainer.innerHTML = '';
         let allEvents = [];
@@ -1189,22 +1254,32 @@
 
         const now = new Date();
         now.setHours(0,0,0,0);
-        let upcomingEvents = allEvents.filter(ev => ev.dateObj >= now);
+
+        let filteredEvents = allEvents;
+        if (currentFilter === 'upcoming') {
+            filteredEvents = allEvents.filter(ev => ev.dateObj >= now);
+        } else if (currentFilter === 'past') {
+            filteredEvents = allEvents.filter(ev => ev.dateObj < now);
+        }
 
         if (searchQuery.trim() !== '') {
             const query = searchQuery.toLowerCase();
-            upcomingEvents = upcomingEvents.filter(ev => 
+            filteredEvents = filteredEvents.filter(ev => 
                 ev.title.toLowerCase().includes(query) || 
                 (ev.desc && ev.desc.toLowerCase().includes(query))
             );
         }
 
-        if (upcomingEvents.length === 0) {
-            eventsListContainer.innerHTML = `<div class="no-events">${searchQuery ? 'Brak wyników wyszukiwania.' : 'Brak nadchodzących wydarzeń.'}</div>`;
+        if (filteredEvents.length === 0) {
+            let msg = 'Brak wydarzeń.';
+            if (currentFilter === 'upcoming') msg = 'Brak nadchodzących wydarzeń.';
+            if (currentFilter === 'past') msg = 'Brak przeminiętych wydarzeń.';
+            if (searchQuery) msg = 'Brak wyników wyszukiwania.';
+            eventsListContainer.innerHTML = `<div class="no-events">${msg}</div>`;
             return;
         }
 
-        upcomingEvents.forEach(ev => {
+        filteredEvents.forEach(ev => {
             const item = document.createElement('div');
             item.classList.add('list-item');
             
@@ -1342,7 +1417,8 @@
         }
     }, 30000);
 
-    function openModalForAdd(dateStr = null, day = null, monthName = null, year = null) {
+    // KLIKNIĘCIE W DZIEŃ KALENDARZA (Pokaże istniejące wpisy w tym dniu + formularz nowego)
+    function openModalForDay(dateStr, day, monthName, year) {
         editDateKeyInput.value = '';
         editIndexInput.value = '';
         eventTitleInput.value = '';
@@ -1350,15 +1426,85 @@
         eventDescInput.value = '';
         updateCategorySelect();
         
-        if (dateStr) {
-            const [y, m, d] = dateStr.split('-');
-            eventDateInput.value = `${y}-${String(parseInt(m)+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-            modalTitleText.textContent = `Wydarzenie: ${day} ${monthName}`;
+        const [y, m, d] = dateStr.split('-');
+        const formattedDate = `${y}-${String(parseInt(m)+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        eventDateInput.value = formattedDate;
+        
+        modalTitleText.textContent = `Dzień: ${day} ${monthName} ${year}`;
+        
+        // Wyświetl listę wpisów w tym dniu w modalu, jeśli istnieją
+        dayEventsList.innerHTML = '';
+        if (eventsData[dateStr] && eventsData[dateStr].length > 0) {
+            dayExistingEventsContainer.style.display = 'block';
+            eventsData[dateStr].forEach((ev, idx) => {
+                const row = document.createElement('div');
+                row.style.display = 'flex';
+                row.style.justifyContent = 'space-between';
+                row.style.alignItems = 'center';
+                row.style.backgroundColor = 'var(--bg-color)';
+                row.style.padding = '8px 10px';
+                row.style.borderRadius = '8px';
+                row.style.border = '1px solid var(--border)';
+
+                const timeTxt = ev.time ? `${ev.time} - ` : '';
+                const titleSpan = document.createElement('span');
+                titleSpan.style.fontSize = '0.9rem';
+                titleSpan.innerHTML = `<strong>${timeTxt}${ev.title}</strong>`;
+
+                const btnGroup = document.createElement('div');
+                btnGroup.style.display = 'flex';
+                btnGroup.style.gap = '4px';
+
+                const editBtn = document.createElement('button');
+                editBtn.classList.add('edit-btn');
+                editBtn.textContent = 'Edytuj';
+                editBtn.style.padding = '3px 8px';
+                editBtn.onclick = () => {
+                    closeModal();
+                    openModalForEdit(dateStr, idx);
+                };
+
+                const delBtn = document.createElement('button');
+                delBtn.classList.add('delete-btn');
+                delBtn.textContent = 'Usuń';
+                delBtn.style.padding = '3px 8px';
+                delBtn.onclick = () => {
+                    eventsData[dateStr].splice(idx, 1);
+                    if (eventsData[dateStr].length === 0) delete eventsData[dateStr];
+                    localStorage.setItem('planerEvents', JSON.stringify(eventsData));
+                    renderCalendar(currentMonth, currentYear);
+                    if (eventsData[dateStr] && eventsData[dateStr].length > 0) {
+                        openModalForDay(dateStr, day, monthName, year); // odśwież modal
+                    } else {
+                        closeModal();
+                    }
+                };
+
+                btnGroup.appendChild(editBtn);
+                btnGroup.appendChild(delBtn);
+                row.appendChild(titleSpan);
+                row.appendChild(btnGroup);
+                dayEventsList.appendChild(row);
+            });
         } else {
-            const today = new Date();
-            eventDateInput.value = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
-            modalTitleText.textContent = `Nowe Wydarzenie`;
+            dayExistingEventsContainer.style.display = 'none';
         }
+
+        eventModal.classList.add('active');
+    }
+
+    function openModalForGlobalAdd() {
+        editDateKeyInput.value = '';
+        editIndexInput.value = '';
+        eventTitleInput.value = '';
+        eventTimeInput.value = '';
+        eventDescInput.value = '';
+        updateCategorySelect();
+        dayExistingEventsContainer.style.display = 'none';
+
+        const today = new Date();
+        eventDateInput.value = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+        modalTitleText.textContent = `Nowe Wydarzenie`;
         eventModal.classList.add('active');
     }
 
@@ -1366,6 +1512,7 @@
         const ev = eventsData[dateStr][index];
         editDateKeyInput.value = dateStr;
         editIndexInput.value = index;
+        dayExistingEventsContainer.style.display = 'none';
         
         const [y, m, d] = dateStr.split('-');
         eventDateInput.value = `${y}-${String(parseInt(m)+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
@@ -1403,14 +1550,12 @@
         const editIndex = editIndexInput.value;
 
         if (editDateKey !== "" && editIndex !== "") {
-            // TRYB EDYCJI: Usuń ze starego klucza lub zaktualizuj
             eventsData[editDateKey].splice(editIndex, 1);
             if (eventsData[editDateKey].length === 0) {
                 delete eventsData[editDateKey];
             }
         }
 
-        // Zapis pod nową lub tą samą datą
         if (!eventsData[newDateStr]) eventsData[newDateStr] = [];
         eventsData[newDateStr].push({ title, time, type, desc });
         
@@ -1487,7 +1632,7 @@
 
     btnCancelModal.addEventListener('click', closeModal);
     btnSaveEvent.addEventListener('click', saveEvent);
-    globalAddBtn.addEventListener('click', () => openModalForAdd(null));
+    globalAddBtn.addEventListener('click', openModalForGlobalAdd);
     eventModal.addEventListener('click', (e) => { if (e.target === eventModal) closeModal(); });
 
     updateCategorySelect();
